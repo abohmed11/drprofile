@@ -777,6 +777,95 @@ export default function AdminPanel({
   const [newSpecialtyName, setNewSpecialtyName] = useState('');
   const [localSpecialties, setLocalSpecialties] = useState<SystemSpecialty[]>(specialties || []);
 
+  // Admin Credentials Reset State
+  const currentAdminEmail = landingConfig?.adminCredentials?.email || 'hassanhamdy@gmail.com';
+  const [adminUsernameInput, setAdminUsernameInput] = useState(currentAdminEmail);
+  const [adminCurrentPasswordInput, setAdminCurrentPasswordInput] = useState('');
+  const [adminNewPasswordInput, setAdminNewPasswordInput] = useState('');
+  const [adminConfirmPasswordInput, setAdminConfirmPasswordInput] = useState('');
+  const [showAdminCurrentPass, setShowAdminCurrentPass] = useState(false);
+  const [showAdminNewPass, setShowAdminNewPass] = useState(false);
+  const [showAdminConfirmPass, setShowAdminConfirmPass] = useState(false);
+  const [adminCredsSuccessMsg, setAdminCredsSuccessMsg] = useState<string | null>(null);
+  const [adminCredsErrorMsg, setAdminCredsErrorMsg] = useState<string | null>(null);
+  const [isAdminCredsSaving, setIsAdminCredsSaving] = useState(false);
+
+  useEffect(() => {
+    if (landingConfig?.adminCredentials?.email) {
+      setAdminUsernameInput(landingConfig.adminCredentials.email);
+    }
+  }, [landingConfig?.adminCredentials?.email]);
+
+  const handleSaveAdminCredentials = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setAdminCredsErrorMsg(null);
+    setAdminCredsSuccessMsg(null);
+
+    const cleanEmail = adminUsernameInput.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@') || cleanEmail.length < 5) {
+      setAdminCredsErrorMsg('يرجى كتابة بريد إلكتروني صالح ومكتمل لمدير المنصة.');
+      return;
+    }
+
+    const isChangingPassword = adminNewPasswordInput.trim().length > 0;
+    if (isChangingPassword) {
+      if (adminNewPasswordInput.trim().length < 6) {
+        setAdminCredsErrorMsg('يجب أن تتكون كلمة المرور الجديدة من 6 خانات/أحرف على الأقل لضمان الأمان.');
+        return;
+      }
+      if (adminNewPasswordInput !== adminConfirmPasswordInput) {
+        setAdminCredsErrorMsg('كلمة المرور الجديدة وتأكيد كلمة المرور غير متطابقين، يرجى إعادة التحقق.');
+        return;
+      }
+      const activeCurrentPass = landingConfig?.adminCredentials?.passwordHash || 'Abo Hmed 011# Abo hassan';
+      if (adminCurrentPasswordInput && adminCurrentPasswordInput !== activeCurrentPass) {
+        setAdminCredsErrorMsg('كلمة المرور الحالية المدخلة غير صحيحة، يرجى كتابة كلمة المرور الحالية للتأكيد.');
+        return;
+      }
+    }
+
+    setIsAdminCredsSaving(true);
+
+    try {
+      const finalPassword = isChangingPassword 
+        ? adminNewPasswordInput 
+        : (landingConfig?.adminCredentials?.passwordHash || 'Abo Hmed 011# Abo hassan');
+
+      const updatedCreds = {
+        email: cleanEmail,
+        passwordHash: finalPassword
+      };
+
+      // 1. Update in LocalStorage
+      try {
+        localStorage.setItem('dr_admin_credentials', JSON.stringify({
+          email: cleanEmail,
+          password: finalPassword
+        }));
+      } catch (err) {}
+
+      // 2. Update via landingConfig prop
+      if (onUpdateLandingConfig) {
+        onUpdateLandingConfig({
+          ...landingConfig,
+          adminCredentials: updatedCreds
+        });
+      }
+
+      setAdminCredsSuccessMsg('تم حفظ وتحديث بيانات حساب المشرف (اسم المستخدم وكلمة السر) بنجاح!');
+      setAdminCurrentPasswordInput('');
+      setAdminNewPasswordInput('');
+      setAdminConfirmPasswordInput('');
+      setTimeout(() => {
+        setAdminCredsSuccessMsg(null);
+      }, 7000);
+    } catch (err: any) {
+      setAdminCredsErrorMsg('حدث خطأ أثناء حفظ البيانات: ' + (err?.message || 'يرجى المحاولة مجدداً'));
+    } finally {
+      setIsAdminCredsSaving(false);
+    }
+  };
+
   useEffect(() => {
     if (specialties && specialties.length > 0) {
       setLocalSpecialties(specialties);
@@ -6705,9 +6794,205 @@ export default function AdminPanel({
         )}
 
         {activeTab === 'settings' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             
-            {/* Add Medical Specialty */}
+            {/* 1. Admin Credentials & Security Card (إعادة تعيين اسم المستخدم وكلمة السر لمدير المنصة) */}
+            <div className="bg-white rounded-3xl border border-neutral-200/80 p-6 md:p-8 shadow-sm text-right space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 rounded-2xl bg-[#10244A] text-white flex items-center justify-center shadow-md shrink-0">
+                    <ShieldCheck className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-neutral-900">إعادة تعيين اسم المستخدم وكلمة السر لمدير المنصة</h2>
+                    <p className="text-neutral-500 text-xs font-semibold mt-0.5">
+                      تحديث بيانات الدخول الخاصة بحساب المشرف الرئيسي والأدمن لتأمين لوحة التحكم
+                    </p>
+                  </div>
+                </div>
+
+                <div className="px-3.5 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full text-xs font-bold flex items-center gap-1.5 self-start sm:self-auto">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>الحساب الرئيسي مفعل</span>
+                </div>
+              </div>
+
+              {/* Current Status Info Box */}
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-2.5 text-neutral-700">
+                  <Mail className="w-4 h-4 text-[#10244A]" />
+                  <span>اسم المستخدم / البريد الحالي:</span>
+                  <span className="font-mono font-black text-neutral-900 dir-ltr select-all bg-white px-2.5 py-1 rounded-lg border border-neutral-200">
+                    {landingConfig?.adminCredentials?.email || 'hassanhamdy@gmail.com'}
+                  </span>
+                </div>
+                <span className="text-[11px] text-neutral-500 font-medium">
+                  🔒 الصلاحية: مدير كامل الصلاحيات (Super Admin)
+                </span>
+              </div>
+
+              {/* Feedback Alerts */}
+              {adminCredsSuccessMsg && (
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-3 animate-in fade-in">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>{adminCredsSuccessMsg}</span>
+                </div>
+              )}
+
+              {adminCredsErrorMsg && (
+                <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs font-bold flex items-center gap-3 animate-in fade-in">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+                  <span>{adminCredsErrorMsg}</span>
+                </div>
+              )}
+
+              {/* Edit Credentials Form */}
+              <form onSubmit={handleSaveAdminCredentials} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  {/* Admin Username / Email */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="block text-xs font-extrabold text-neutral-800 flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-[#10244A]" />
+                      <span>اسم المستخدم / البريد الإلكتروني الجديد للمدير:</span>
+                    </label>
+                    <input 
+                      type="email"
+                      value={adminUsernameInput}
+                      onChange={(e) => setAdminUsernameInput(e.target.value)}
+                      placeholder="hassanhamdy@gmail.com"
+                      required
+                      className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-[#10244A] focus:bg-white transition-all text-left dir-ltr"
+                    />
+                    <span className="text-[11px] text-neutral-400 font-medium block">
+                      * هذا هو البريد الذي ستستخدمه لتسجيل الدخول كأدمن للمنصة.
+                    </span>
+                  </div>
+
+                  {/* Current Password for confirmation */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="block text-xs font-extrabold text-neutral-800 flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-neutral-500" />
+                      <span>كلمة المرور الحالية (للتأكيد عند التغيير):</span>
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type={showAdminCurrentPass ? "text" : "password"}
+                        value={adminCurrentPasswordInput}
+                        onChange={(e) => setAdminCurrentPasswordInput(e.target.value)}
+                        placeholder="أدخل كلمة المرور الحالية للتأكيد..."
+                        className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-[#10244A] focus:bg-white transition-all text-left dir-ltr pl-11"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminCurrentPass(!showAdminCurrentPass)}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 cursor-pointer p-1"
+                        title={showAdminCurrentPass ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      >
+                        {showAdminCurrentPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* New Password */}
+                  <div className="space-y-2">
+                    <label className="block text-xs font-extrabold text-neutral-800 flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-[#10244A]" />
+                      <span>كلمة المرور الجديدة:</span>
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type={showAdminNewPass ? "text" : "password"}
+                        value={adminNewPasswordInput}
+                        onChange={(e) => setAdminNewPasswordInput(e.target.value)}
+                        placeholder="اكتب كلمة المرور الجديدة (6 خانات على الأقل)..."
+                        className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-[#10244A] focus:bg-white transition-all text-left dir-ltr pl-11"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminNewPass(!showAdminNewPass)}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 cursor-pointer p-1"
+                        title={showAdminNewPass ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      >
+                        {showAdminNewPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    <span className="text-[11px] text-neutral-400 font-medium block">
+                      * اتركها فارغة إذا كنت ترغب فقط في تعديل اسم المستخدم / البريد.
+                    </span>
+                  </div>
+
+                  {/* Confirm New Password */}
+                  <div className="space-y-2">
+                    <label className="block text-xs font-extrabold text-neutral-800 flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-[#10244A]" />
+                      <span>تأكيد كلمة المرور الجديدة:</span>
+                    </label>
+                    <div className="relative">
+                      <input 
+                        type={showAdminConfirmPass ? "text" : "password"}
+                        value={adminConfirmPasswordInput}
+                        onChange={(e) => setAdminConfirmPasswordInput(e.target.value)}
+                        placeholder="أعد كتابة كلمة المرور الجديدة..."
+                        className="w-full px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-2xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-[#10244A] focus:bg-white transition-all text-left dir-ltr pl-11"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowAdminConfirmPass(!showAdminConfirmPass)}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 cursor-pointer p-1"
+                        title={showAdminConfirmPass ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                      >
+                        {showAdminConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    {adminNewPasswordInput && adminConfirmPasswordInput && (
+                      <span className={`text-[11px] font-bold block ${adminNewPasswordInput === adminConfirmPasswordInput ? 'text-emerald-600' : 'text-red-500'}`}>
+                        {adminNewPasswordInput === adminConfirmPasswordInput ? '✓ كلمتا المرور متطابقتان' : '✗ كلمتا المرور غير متطابقتين'}
+                      </span>
+                    )}
+                  </div>
+
+                </div>
+
+                {/* Submit Action Buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-neutral-100">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAdminUsernameInput(currentAdminEmail);
+                      setAdminCurrentPasswordInput('');
+                      setAdminNewPasswordInput('');
+                      setAdminConfirmPasswordInput('');
+                      setAdminCredsErrorMsg(null);
+                      setAdminCredsSuccessMsg(null);
+                    }}
+                    className="w-full sm:w-auto px-5 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-extrabold text-xs rounded-2xl transition-all cursor-pointer"
+                  >
+                    تفريغ وإلغاء
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={isAdminCredsSaving}
+                    className="w-full sm:w-auto px-8 py-3 bg-[#10244A] hover:bg-[#091A3A] text-white font-black text-xs rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {isAdminCredsSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>جاري الحفظ والتأمين...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        <span>حفظ وتحديث بيانات الدخول</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+            
+            {/* 2. Add Medical Specialty */}
             <div className="bg-white rounded-3xl border border-neutral-200/60 p-6 md:p-8 shadow-sm text-right space-y-6">
               <h2 className="text-lg font-black text-black">إضافة تخصص طبي جديد للنظام</h2>
               
@@ -6728,7 +7013,7 @@ export default function AdminPanel({
               </form>
             </div>
 
-            {/* List of active specialties */}
+            {/* 3. List of active specialties */}
             <div className="bg-white rounded-3xl border border-neutral-200/60 p-6 md:p-8 shadow-sm text-right">
               <h3 className="font-extrabold text-sm text-neutral-900 mb-4">التخصصات الطبية المعولمة حالياً في النظام</h3>
               <div className="flex flex-wrap gap-3 justify-start">
