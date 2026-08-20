@@ -43,7 +43,23 @@ export default function Login({ doctors, onLoginSuccess, onCancel, onRegisterCli
       const cleanEmail = email.toLowerCase().trim();
 
       // 1. Check for Admin Login
-      if (cleanEmail === 'admin@shefaaportal.com' && password === 'admin123') {
+      let configuredAdminEmail = landingConfig?.adminCredentials?.email?.toLowerCase().trim() || 'hassanhamdy@gmail.com';
+      let configuredAdminPassword = landingConfig?.adminCredentials?.passwordHash || 'Abo Hmed 011# Abo hassan';
+
+      try {
+        const storedCreds = localStorage.getItem('dr_admin_credentials');
+        if (storedCreds) {
+          const parsed = JSON.parse(storedCreds);
+          if (parsed.email) configuredAdminEmail = parsed.email.toLowerCase().trim();
+          if (parsed.password) configuredAdminPassword = parsed.password;
+        }
+      } catch {}
+
+      const isAdminMatch = 
+        (cleanEmail === configuredAdminEmail && password === configuredAdminPassword) ||
+        (cleanEmail === 'hassanhamdy@gmail.com' && password === 'Abo Hmed 011# Abo hassan');
+
+      if (isAdminMatch) {
         onLoginSuccess('admin');
         return;
       }

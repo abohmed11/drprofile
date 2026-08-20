@@ -609,7 +609,18 @@ export interface LandingPageConfig {
     copyrightText?: string;
   };
   importantPages?: ImportantPagesConfig;
+  adminCredentials?: AdminCredentials;
 }
+
+export interface AdminCredentials {
+  email: string;
+  passwordHash: string;
+}
+
+export const DEFAULT_ADMIN_CREDENTIALS: AdminCredentials = {
+  email: "hassanhamdy@gmail.com",
+  passwordHash: "Abo Hmed 011# Abo hassan"
+};
 
 export interface FooterSocialLink {
   id: string;
@@ -622,6 +633,7 @@ export interface FooterSocialLink {
 export const DEFAULT_LANDING_CONFIG: LandingPageConfig = {
   faviconUrl: 'https://k.top4top.io/p_38573eitn0.png',
   seo: DEFAULT_SEO_CONFIG,
+  adminCredentials: DEFAULT_ADMIN_CREDENTIALS,
   headerLogos: {
     darkLogoUrl: 'https://k.top4top.io/p_38573eitn0.png',
     lightLogoUrl: 'https://i.top4top.io/p_3857n94r80.png'
