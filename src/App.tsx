@@ -559,6 +559,24 @@ export default function App() {
     seedBannersIfEmpty(INITIAL_BANNERS);
     seedSpecialtiesIfEmpty(INITIAL_SPECIALTIES);
 
+    // Auto-sync any existing local doctors to Firestore and Supabase
+    try {
+      const savedDocsStr = localStorage.getItem('dr_doctors');
+      if (savedDocsStr) {
+        const savedDocs = JSON.parse(savedDocsStr);
+        if (Array.isArray(savedDocs)) {
+          savedDocs.forEach(d => {
+            if (d && d.id) {
+              saveDoctorInDb(sanitizeDoctorDates(d));
+              saveDoctorToSupabase(sanitizeDoctorDates(d));
+            }
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('Local doctors sync error:', e);
+    }
+
     // Auto-seed to user's Supabase database initially
     seedAllDataToSupabase(INITIAL_DOCTORS, INITIAL_APPOINTMENTS, DEFAULT_LANDING_CONFIG, INITIAL_BANNERS);
 

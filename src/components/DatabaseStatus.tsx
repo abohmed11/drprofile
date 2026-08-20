@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Server, Wifi, CheckCircle2, RefreshCw, ExternalLink, Copy, Check, Key, Link2, Upload, AlertCircle, Sparkles } from 'lucide-react';
-import { db, isFirestoreQuotaExceeded } from '../lib/firebase';
+import { db, isFirestoreQuotaExceeded, saveDoctorInDb } from '../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { 
   getSupabaseCredentials, saveSupabaseCredentials, getSupabaseClient, 
@@ -70,6 +70,10 @@ export default function DatabaseStatus({
     setSyncErrorMsg(null);
 
     try {
+      // Sync to Firestore
+      for (const d of doctors) {
+        await saveDoctorInDb(d).catch(() => {});
+      }
       const res = await seedAllDataToSupabase(doctors, appointments, landingConfig, banners);
       if (res.success) {
         setSyncStatusMsg(res.message);
