@@ -217,6 +217,7 @@ export default function CreateSiteForm({
       id: `doc-${Date.now()}`,
       name: name.trim(),
       nameEn: nameEn.toLowerCase().trim(),
+      password: password,
       specialty,
       jobTitle: resolvedJobTitle,
       email: email.trim(),

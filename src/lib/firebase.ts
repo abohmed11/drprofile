@@ -80,7 +80,7 @@ try {
         : initializeFirestore(app, firestoreSettings);
     } catch {
       try {
-        firestoreDb = getFirestore(app);
+        firestoreDb = targetDbId ? getFirestore(app, targetDbId) : getFirestore(app);
       } catch {
         firestoreDb = null;
       }

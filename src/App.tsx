@@ -461,6 +461,38 @@ export default function App() {
     }
   }, [doctors]);
 
+  // Listen for storage events (e.g. registration in another tab) and custom events
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'dr_doctors' && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (Array.isArray(parsed)) {
+            setDoctors(parsed.map(d => sanitizeDoctorDates(d)));
+          }
+        } catch {}
+      }
+    };
+
+    const handleCustomDoctorUpdate = (e: any) => {
+      if (e?.detail) {
+        setDoctors(prev => {
+          const newDoc = sanitizeDoctorDates(e.detail);
+          const filtered = prev.filter(d => d.id !== newDoc.id);
+          const updated = [newDoc, ...filtered];
+          return updated;
+        });
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('dr_doctors_updated', handleCustomDoctorUpdate);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('dr_doctors_updated', handleCustomDoctorUpdate);
+    };
+  }, []);
+
   useEffect(() => {
     try {
       if (appointments) {
@@ -1103,6 +1135,10 @@ export default function App() {
     });
     saveDoctorInDb(activeDoc);
     saveDoctorToSupabase(activeDoc);
+
+    try {
+      window.dispatchEvent(new CustomEvent('dr_doctors_updated', { detail: activeDoc }));
+    } catch {}
 
     // Automatically log into doctor dashboard
     setCurrentUserRole('doctor');
