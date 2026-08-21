@@ -156,6 +156,7 @@ export default function Login({ doctors, onLoginSuccess, onCancel, onRegisterCli
               <img 
                 src="https://a.top4top.io/p_3882vpeoy1.png" 
                 alt="Doctor Profile" 
+                referrerPolicy="no-referrer"
                 className="w-full h-auto max-h-[250px] object-contain drop-shadow-md select-none transition-transform duration-300 hover:scale-[1.02]"
               />
             </div>
@@ -215,6 +216,7 @@ export default function Login({ doctors, onLoginSuccess, onCancel, onRegisterCli
               <img 
                 src={landingConfig?.login?.logoUrl || "https://i.top4top.io/p_3857n94r80.png"} 
                 alt="بروفايلي - البوابة الطبية الشاملة" 
+                referrerPolicy="no-referrer"
                 className="h-16 sm:h-20 w-auto object-contain"
               />
             </div>

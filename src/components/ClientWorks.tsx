@@ -241,6 +241,7 @@ export default function ClientWorks({
                           alt={card.title || (isEn ? 'Doctor Profile Demo' : 'نموذج بروفايل الطبيب')}
                           className="w-full h-full object-cover object-top pointer-events-none"
                           loading="lazy"
+                          referrerPolicy="no-referrer"
                           draggable={false}
                         />
                       </div>
@@ -320,6 +321,7 @@ export default function ClientWorks({
                     alt={card.title || (isEn ? 'Doctor Profile Demo' : 'نموذج بروفايل الطبيب')}
                     className="w-full h-full object-cover object-top group-hover:scale-101 transition-transform duration-500"
                     loading="lazy"
+                    referrerPolicy="no-referrer"
                   />
                 </div>
 

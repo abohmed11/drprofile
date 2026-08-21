@@ -228,16 +228,32 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
             referrerPolicy="no-referrer"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (landingConfig?.hero?.heroDesktopImage && target.src !== landingConfig.hero.heroDesktopImage) {
+                target.src = landingConfig.hero.heroDesktopImage;
+              } else if (target.src !== "https://k.top4top.io/p_3874k7cvg1.png") {
+                target.src = "https://k.top4top.io/p_3874k7cvg1.png";
+              }
+            }}
             className="block lg:hidden w-full max-w-2xl md:max-w-3xl h-auto object-contain object-top max-h-none transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
             style={{ WebkitUserDrag: 'none', userSelect: 'none' } as React.CSSProperties}
           />
           {/* Desktop Image */}
           <img 
-            src={landingConfig?.hero?.heroDesktopImage || "https://h.top4top.io/p_3874d6cv31.png"} 
+            src={landingConfig?.hero?.heroDesktopImage || landingConfig?.hero?.heroMobileImage || "https://h.top4top.io/p_3874d6cv31.png"} 
             alt="Hero Visual" 
             referrerPolicy="no-referrer"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (landingConfig?.hero?.heroMobileImage && target.src !== landingConfig.hero.heroMobileImage) {
+                target.src = landingConfig.hero.heroMobileImage;
+              } else if (target.src !== "https://k.top4top.io/p_3874k7cvg1.png") {
+                target.src = "https://k.top4top.io/p_3874k7cvg1.png";
+              }
+            }}
             className="hidden lg:block w-full h-auto object-contain object-top lg:object-left-top max-h-[calc(100vh-76px)] transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
             style={{ WebkitUserDrag: 'none', userSelect: 'none' } as React.CSSProperties}
           />

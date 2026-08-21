@@ -357,6 +357,7 @@ export default function CreateSiteForm({
                 <img 
                   src="https://a.top4top.io/p_3882vpeoy1.png" 
                   alt="Doctor Profile" 
+                  referrerPolicy="no-referrer"
                   className="w-full h-auto max-h-[250px] object-contain drop-shadow-md select-none transition-transform duration-300 hover:scale-[1.02]"
                 />
               </div>
@@ -415,6 +416,7 @@ export default function CreateSiteForm({
               <img 
                 src={formLogo} 
                 alt="Logo" 
+                referrerPolicy="no-referrer"
                 className="h-16 sm:h-20 md:h-22 mx-auto mb-3 object-contain drop-shadow-sm transition-all duration-300"
               />
               <h2 className="text-2xl sm:text-3xl font-black text-[#0f172a] tracking-tight">

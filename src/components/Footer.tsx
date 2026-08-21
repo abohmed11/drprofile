@@ -144,6 +144,7 @@ export default function Footer({ onNavigate, landingConfig, currentLang = 'ar' }
                 alt="Dr Profile Logo" 
                 loading="lazy"
                 decoding="async"
+                referrerPolicy="no-referrer"
                 width="185"
                 height="50"
                 className="w-[140px] sm:w-[185px] h-auto object-contain"
@@ -161,6 +162,7 @@ export default function Footer({ onNavigate, landingConfig, currentLang = 'ar' }
                   alt="Payment Methods" 
                   loading="lazy"
                   decoding="async"
+                  referrerPolicy="no-referrer"
                   className="max-h-16 sm:max-h-20 md:max-h-24 w-auto max-w-[280px] sm:max-w-[360px] object-contain rounded-lg drop-shadow-md"
                 />
               </div>
