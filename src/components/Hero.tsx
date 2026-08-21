@@ -188,52 +188,24 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
                   src="https://b.top4top.io/p_3877muh0n1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
-                  loading="eager"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src !== "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80") {
-                      target.src = "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80";
-                    }
-                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_3877l7e661.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
-                  loading="eager"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src !== "https://images.unsplash.com/photo-1594824813587-878939c381d6?w=150&auto=format&fit=crop&q=80") {
-                      target.src = "https://images.unsplash.com/photo-1594824813587-878939c381d6?w=150&auto=format&fit=crop&q=80";
-                    }
-                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_38774iynl1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
-                  loading="eager"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src !== "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&auto=format&fit=crop&q=80") {
-                      target.src = "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&auto=format&fit=crop&q=80";
-                    }
-                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://b.top4top.io/p_3877phl351.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
-                  loading="eager"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (target.src !== "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80") {
-                      target.src = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80";
-                    }
-                  }}
                 />
               </div>
 
@@ -254,8 +226,6 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
             src={landingConfig?.hero?.heroMobileImage || "https://k.top4top.io/p_3874k7cvg1.png"} 
             alt="Hero Visual" 
             referrerPolicy="no-referrer"
-            loading="eager"
-            decoding="async"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
             className="block lg:hidden w-full max-w-2xl md:max-w-3xl h-auto object-contain object-top max-h-none transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
@@ -266,8 +236,6 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
             src={landingConfig?.hero?.heroDesktopImage || "https://h.top4top.io/p_3874d6cv31.png"} 
             alt="Hero Visual" 
             referrerPolicy="no-referrer"
-            loading="eager"
-            decoding="async"
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
             className="hidden lg:block w-full h-auto object-contain object-top lg:object-left-top max-h-[calc(100vh-76px)] transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
