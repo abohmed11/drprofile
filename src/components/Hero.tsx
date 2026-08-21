@@ -188,24 +188,52 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
                   src="https://b.top4top.io/p_3877muh0n1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src !== "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80") {
+                      target.src = "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&auto=format&fit=crop&q=80";
+                    }
+                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_3877l7e661.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src !== "https://images.unsplash.com/photo-1594824813587-878939c381d6?w=150&auto=format&fit=crop&q=80") {
+                      target.src = "https://images.unsplash.com/photo-1594824813587-878939c381d6?w=150&auto=format&fit=crop&q=80";
+                    }
+                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_38774iynl1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src !== "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&auto=format&fit=crop&q=80") {
+                      target.src = "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&auto=format&fit=crop&q=80";
+                    }
+                  }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://b.top4top.io/p_3877phl351.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (target.src !== "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80") {
+                      target.src = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&auto=format&fit=crop&q=80";
+                    }
+                  }}
                 />
               </div>
 
