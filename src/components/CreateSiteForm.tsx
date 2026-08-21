@@ -8,6 +8,7 @@ import { Stethoscope, Check, AlertCircle, ChevronDown, Camera, User, UserPlus, B
 import { SystemSpecialty, Doctor, LandingPageConfig } from '../types';
 import { compressImage } from '../lib/imageUtils';
 import LanguageSelector from './LanguageSelector';
+import { FALLBACK_LOGO_SVG, FALLBACK_PROFILE_DEMO_SVG } from '../lib/imageFallbacks';
 
 interface CreateSiteFormProps {
   specialties: SystemSpecialty[];
@@ -358,6 +359,7 @@ export default function CreateSiteForm({
                   src="https://a.top4top.io/p_3882vpeoy1.png" 
                   alt="Doctor Profile" 
                   referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = FALLBACK_PROFILE_DEMO_SVG; }}
                   className="w-full h-auto max-h-[250px] object-contain drop-shadow-md select-none transition-transform duration-300 hover:scale-[1.02]"
                 />
               </div>
@@ -417,6 +419,7 @@ export default function CreateSiteForm({
                 src={formLogo} 
                 alt="Logo" 
                 referrerPolicy="no-referrer"
+                onError={(e) => { e.currentTarget.src = FALLBACK_LOGO_SVG; }}
                 className="h-16 sm:h-20 md:h-22 mx-auto mb-3 object-contain drop-shadow-sm transition-all duration-300"
               />
               <h2 className="text-2xl sm:text-3xl font-black text-[#0f172a] tracking-tight">

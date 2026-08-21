@@ -1522,6 +1522,8 @@ export default function DoctorProfile({
                   alt={doctor.name} 
                   loading="eager"
                   decoding="async"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = createAvatarDataUrl(doctor.name || 'طبيب'); }}
                   width="360"
                   height="360"
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"

@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, LogIn, AlertCircle, ShieldCheck, Globe, CalendarCheck } from 'lucide-react';
 import { Doctor, LandingPageConfig } from '../types';
 import LanguageSelector from './LanguageSelector';
+import { FALLBACK_LOGO_SVG, FALLBACK_PROFILE_DEMO_SVG } from '../lib/imageFallbacks';
 
 interface LoginProps {
   doctors: Doctor[];
@@ -157,6 +158,7 @@ export default function Login({ doctors, onLoginSuccess, onCancel, onRegisterCli
                 src="https://a.top4top.io/p_3882vpeoy1.png" 
                 alt="Doctor Profile" 
                 referrerPolicy="no-referrer"
+                onError={(e) => { e.currentTarget.src = FALLBACK_PROFILE_DEMO_SVG; }}
                 className="w-full h-auto max-h-[250px] object-contain drop-shadow-md select-none transition-transform duration-300 hover:scale-[1.02]"
               />
             </div>
@@ -217,6 +219,7 @@ export default function Login({ doctors, onLoginSuccess, onCancel, onRegisterCli
                 src={landingConfig?.login?.logoUrl || "https://i.top4top.io/p_3857n94r80.png"} 
                 alt="بروفايلي - البوابة الطبية الشاملة" 
                 referrerPolicy="no-referrer"
+                onError={(e) => { e.currentTarget.src = FALLBACK_LOGO_SVG; }}
                 className="h-16 sm:h-20 w-auto object-contain"
               />
             </div>

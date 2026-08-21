@@ -14,6 +14,19 @@ import {
 import { LandingPageConfig } from '../types';
 import { MedicalDeviceMockup } from './Subscription';
 import { DEFAULT_FEATURES_AR, DEFAULT_FEATURES_EN, translateItemText } from '../lib/translations';
+import { 
+  FALLBACK_FEATURE_PROFILE_SVG, 
+  FALLBACK_FEATURE_APPOINTMENTS_SVG, 
+  FALLBACK_FEATURE_MARKETING_SVG, 
+  FALLBACK_FEATURE_ADMIN_SVG 
+} from '../lib/imageFallbacks';
+
+const FEATURE_FALLBACKS = [
+  FALLBACK_FEATURE_PROFILE_SVG,
+  FALLBACK_FEATURE_APPOINTMENTS_SVG,
+  FALLBACK_FEATURE_MARKETING_SVG,
+  FALLBACK_FEATURE_ADMIN_SVG
+];
 
 interface FeaturesProps {
   landingConfig?: LandingPageConfig;
@@ -181,6 +194,7 @@ export default function Features({ landingConfig, currentLang = 'ar', onNavigate
                     alt={cat.title || `Features ${catIdx + 1}`} 
                     className="w-full max-w-sm md:max-w-[420px] lg:max-w-[480px] h-auto object-contain rounded-xl transition-transform" 
                     referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.src = FEATURE_FALLBACKS[catIdx % FEATURE_FALLBACKS.length]; }}
                   />
                 </motion.div>
               </>
@@ -199,6 +213,7 @@ export default function Features({ landingConfig, currentLang = 'ar', onNavigate
                     alt={cat.title || `Features ${catIdx + 1}`} 
                     className="w-full max-w-sm md:max-w-[420px] lg:max-w-[480px] h-auto object-contain rounded-xl transition-transform" 
                     referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.src = FEATURE_FALLBACKS[catIdx % FEATURE_FALLBACKS.length]; }}
                   />
                 </motion.div>
                 

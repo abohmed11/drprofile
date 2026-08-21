@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Globe, Link, Share2, Clock, Monitor, Smartphone, CheckCircle2 } from 'lucide-react';
 import { LandingPageConfig } from '../types';
+import { DOCTOR_AVATARS, FALLBACK_PROFILE_DEMO_SVG } from '../lib/imageFallbacks';
 
 interface HeroProps {
   onNavigate: (view: 'landing' | 'features' | 'subscription' | 'contact' | 'login' | 'dashboard' | 'admin' | 'dr' | 'create', docUsername?: string) => void;
@@ -188,24 +189,28 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
                   src="https://b.top4top.io/p_3877muh0n1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = DOCTOR_AVATARS[0]; }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_3877l7e661.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = DOCTOR_AVATARS[1]; }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://l.top4top.io/p_38774iynl1.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = DOCTOR_AVATARS[2]; }}
                 />
                 <img 
                   className="inline-block h-8 w-8 sm:h-10 sm:w-10 rounded-full ring-2 ring-white bg-slate-100 object-cover shrink-0 shadow-xs" 
                   src="https://b.top4top.io/p_3877phl351.png" 
                   alt="Doctor" 
                   referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.src = DOCTOR_AVATARS[3]; }}
                 />
               </div>
 
@@ -221,25 +226,6 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
 
         {/* Left side: Image starting right from below the top header and starting from left edge */}
         <div className="flex-1 w-full lg:w-1/2 flex items-start justify-center lg:justify-start order-1 lg:order-2 [direction:ltr] p-0 m-0 pt-4 sm:pt-8 lg:pt-12">
-          {/* Mobile & Tablet Image */}
-          <img 
-            src={landingConfig?.hero?.heroMobileImage || "https://k.top4top.io/p_3874k7cvg1.png"} 
-            alt="Hero Visual" 
-            referrerPolicy="no-referrer"
-            draggable={false}
-            onContextMenu={(e) => e.preventDefault()}
-            onError={(e) => {
-              const target = e.currentTarget;
-              if (landingConfig?.hero?.heroDesktopImage && target.src !== landingConfig.hero.heroDesktopImage) {
-                target.src = landingConfig.hero.heroDesktopImage;
-              } else if (target.src !== "https://k.top4top.io/p_3874k7cvg1.png") {
-                target.src = "https://k.top4top.io/p_3874k7cvg1.png";
-              }
-            }}
-            className="block lg:hidden w-full max-w-2xl md:max-w-3xl h-auto object-contain object-top max-h-none transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
-            style={{ WebkitUserDrag: 'none', userSelect: 'none' } as React.CSSProperties}
-          />
-          {/* Desktop Image */}
           <img 
             src={landingConfig?.hero?.heroDesktopImage || landingConfig?.hero?.heroMobileImage || "https://h.top4top.io/p_3874d6cv31.png"} 
             alt="Hero Visual" 
@@ -248,13 +234,14 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
             onContextMenu={(e) => e.preventDefault()}
             onError={(e) => {
               const target = e.currentTarget;
-              if (landingConfig?.hero?.heroMobileImage && target.src !== landingConfig.hero.heroMobileImage) {
-                target.src = landingConfig.hero.heroMobileImage;
-              } else if (target.src !== "https://k.top4top.io/p_3874k7cvg1.png") {
+              if (target.dataset.hasFailedPrimary !== 'true') {
+                target.dataset.hasFailedPrimary = 'true';
                 target.src = "https://k.top4top.io/p_3874k7cvg1.png";
+              } else {
+                target.src = FALLBACK_PROFILE_DEMO_SVG;
               }
             }}
-            className="hidden lg:block w-full h-auto object-contain object-top lg:object-left-top max-h-[calc(100vh-76px)] transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
+            className="w-full max-w-2xl md:max-w-3xl lg:max-w-none h-auto object-contain object-top lg:object-left-top max-h-[85vh] transition-transform duration-500 hover:scale-[1.01] select-none pointer-events-none"
             style={{ WebkitUserDrag: 'none', userSelect: 'none' } as React.CSSProperties}
           />
         </div>
@@ -311,6 +298,7 @@ export default function Hero({ onNavigate, landingConfig, currentLang = 'ar' }: 
               alt="Medical Profile" 
               className="w-full max-w-sm md:max-w-[420px] h-auto object-contain rounded-xl transition-transform" 
               referrerPolicy="no-referrer"
+              onError={(e) => { e.currentTarget.src = FALLBACK_PROFILE_DEMO_SVG; }}
             />
           </motion.div>
 

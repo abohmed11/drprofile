@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, LogIn, Plus, Globe } from 'lucide-react';
 import { LandingPageConfig } from '../types';
+import { FALLBACK_LOGO_SVG } from '../lib/imageFallbacks';
 
 interface HeaderProps {
   onNavigate: (view: 'landing' | 'features' | 'subscription' | 'contact' | 'login' | 'dashboard' | 'admin' | 'dr' | 'create' | 'clientWorks' | string, docUsername?: string) => void;
@@ -240,6 +241,8 @@ export default function Header({ onNavigate, currentView = 'landing', userRole, 
                     width="160"
                     height="48"
                     decoding="async"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.src = FALLBACK_LOGO_SVG; }}
                     className="h-9 sm:h-11 md:h-12 lg:h-13 max-h-[52px] w-auto object-contain transition-all duration-300 group-hover:scale-105"
                   />
                 </div>

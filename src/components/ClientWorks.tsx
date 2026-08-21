@@ -7,6 +7,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Doctor, LandingPageConfig, PreviewCardItem } from '../types';
 import { ChevronLeft, ExternalLink } from 'lucide-react';
 import { motion } from 'motion/react';
+import { FALLBACK_PROFILE_DEMO_SVG } from '../lib/imageFallbacks';
 
 interface ClientWorksProps {
   doctors?: Doctor[];
@@ -242,6 +243,7 @@ export default function ClientWorks({
                           className="w-full h-full object-cover object-top pointer-events-none"
                           loading="lazy"
                           referrerPolicy="no-referrer"
+                          onError={(e) => { e.currentTarget.src = FALLBACK_PROFILE_DEMO_SVG; }}
                           draggable={false}
                         />
                       </div>
