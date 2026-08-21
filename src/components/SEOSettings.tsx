@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { SEOSettingsConfig, DEFAULT_SEO_CONFIG } from '../types';
 import { fileToDataUrl } from '../lib/fileUtils';
+import { uploadRawFile } from '../lib/storageUtils';
 
 function ImageInputWithUpload({ label, value, onChange }: { label: string; value: string; onChange: (val: string) => void }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -15,10 +16,10 @@ function ImageInputWithUpload({ label, value, onChange }: { label: string; value
     if (!file) return;
     setIsUploading(true);
     try {
-      const dataUrl = await fileToDataUrl(file);
-      onChange(dataUrl);
+      const url = await uploadRawFile(file, 'seo_images');
+      onChange(url);
     } catch (err) {
-      console.error("Failed to compress image in SEO settings:", err);
+      console.error("Failed to upload image in SEO settings:", err);
     } finally {
       setIsUploading(false);
     }

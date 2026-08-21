@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Stethoscope, Check, AlertCircle, ChevronDown, Camera, User, UserPlus, Building2, Globe, CheckCircle2, XCircle, Mail, Lock, Phone, Link as LinkIcon, ShieldCheck, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import { SystemSpecialty, Doctor, LandingPageConfig } from '../types';
 import { fileToDataUrl } from '../lib/fileUtils';
+import { uploadRawFile } from '../lib/storageUtils';
 import LanguageSelector from './LanguageSelector';
 
 interface CreateSiteFormProps {
@@ -180,8 +181,8 @@ export default function CreateSiteForm({
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const dataUrl = await fileToDataUrl(file);
-      setAvatarUrl(dataUrl);
+      const url = await uploadRawFile(file, 'doctor_avatars');
+      setAvatarUrl(url);
       setErrors(prev => {
         const next = { ...prev };
         delete next.avatar;

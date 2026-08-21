@@ -16,6 +16,7 @@ import {
   disableNetwork,
   setLogLevel
 } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 setLogLevel('silent');
 import firebaseConfig from '../../firebase-applet-config.json';
@@ -94,6 +95,7 @@ try {
 
 export const db = firestoreDb;
 export const auth = firebaseAuth;
+export const storage = app ? getStorage(app) : null;
 
 // Check session & persistent quota status for today
 const getTodayDateString = () => new Date().toISOString().split('T')[0];

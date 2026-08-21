@@ -22,6 +22,7 @@ import ImportantPagesSettings from './ImportantPagesSettings';
 import InvoiceModal from './InvoiceModal';
 import { downloadInvoiceDirectly } from '../lib/invoiceUtils';
 import { fileToDataUrl } from '../lib/fileUtils';
+import { uploadRawFile } from '../lib/storageUtils';
 import { 
   Shield, Users, CreditCard, Calendar, Check, X, Eye, EyeOff, Menu, Moon, Sun,
   Trash2, Plus, Sparkles, BarChart, LogOut, Search, Settings, Mail,
@@ -132,10 +133,10 @@ const ImageInputWithUpload = ({
     if (file) {
       setIsUploading(true);
       try {
-        const dataUrl = await fileToDataUrl(file);
-        onChange(dataUrl);
+        const url = await uploadRawFile(file, 'doctor_images');
+        onChange(url);
       } catch (err) {
-        console.error("Failed to compress image upload:", err);
+        console.error("Failed to upload image:", err);
       } finally {
         setIsUploading(false);
       }
