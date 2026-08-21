@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Stethoscope, Check, AlertCircle, ChevronDown, Camera, User, UserPlus, Building2, Globe, CheckCircle2, XCircle, Mail, Lock, Phone, Link as LinkIcon, ShieldCheck, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
 import { SystemSpecialty, Doctor, LandingPageConfig } from '../types';
-import { compressImage } from '../lib/imageUtils';
+import { fileToDataUrl } from '../lib/fileUtils';
 import LanguageSelector from './LanguageSelector';
 
 interface CreateSiteFormProps {
@@ -180,8 +180,8 @@ export default function CreateSiteForm({
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const compressed = await compressImage(file, 400, 400, 0.75);
-      setAvatarUrl(compressed);
+      const dataUrl = await fileToDataUrl(file);
+      setAvatarUrl(dataUrl);
       setErrors(prev => {
         const next = { ...prev };
         delete next.avatar;
@@ -203,9 +203,6 @@ export default function CreateSiteForm({
     setIsSubmitting(true);
 
     let finalAvatar = avatarUrl || 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300';
-    if (avatarUrl && avatarUrl.startsWith('data:image')) {
-      finalAvatar = await compressImage(avatarUrl, 400, 400, 0.75);
-    }
 
     const selectedSpecObj = specialties.find(s => s.id === specialty);
     const resolvedJobTitle = jobTitle.trim() || (selectedSpecObj ? `استشاري ${selectedSpecObj.name}` : 'طبيب');

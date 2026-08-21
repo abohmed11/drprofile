@@ -87,6 +87,13 @@ img, svg, picture, [data-prevent-save] {
   -webkit-backdrop-filter: blur(16px);
 }
 
+.user-profile-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    image-rendering: -webkit-optimize-contrast;
+}
+
 /* Subtle bounce animation for indicators */
 @keyframes soft-bounce {
   0%, 100% {

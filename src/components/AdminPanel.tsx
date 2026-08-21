@@ -21,7 +21,7 @@ import DatabaseStatus from './DatabaseStatus';
 import ImportantPagesSettings from './ImportantPagesSettings';
 import InvoiceModal from './InvoiceModal';
 import { downloadInvoiceDirectly } from '../lib/invoiceUtils';
-import { compressImage } from '../lib/imageUtils';
+import { fileToDataUrl } from '../lib/fileUtils';
 import { 
   Shield, Users, CreditCard, Calendar, Check, X, Eye, EyeOff, Menu, Moon, Sun,
   Trash2, Plus, Sparkles, BarChart, LogOut, Search, Settings, Mail,
@@ -132,10 +132,8 @@ const ImageInputWithUpload = ({
     if (file) {
       setIsUploading(true);
       try {
-        const compressed = await compressImage(file, 600, 600, 0.7);
-        if (compressed) {
-          onChange(compressed);
-        }
+        const dataUrl = await fileToDataUrl(file);
+        onChange(dataUrl);
       } catch (err) {
         console.error("Failed to compress image upload:", err);
       } finally {
