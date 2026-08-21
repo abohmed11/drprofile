@@ -60,6 +60,15 @@ import {
 
 const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => {
   if (!config) return DEFAULT_LANDING_CONFIG;
+
+  let existingConfig: LandingPageConfig | null = null;
+  try {
+    const saved = localStorage.getItem('dr_landing_config');
+    if (saved) {
+      existingConfig = JSON.parse(saved);
+    }
+  } catch (e) {}
+
   const FORCED_FEATURES = [
     "بروفايل طبي",
     "رابط خاص",
@@ -115,16 +124,18 @@ const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => 
 
   const mergedCreateSite = {
     ...DEFAULT_LANDING_CONFIG.createSite,
-    ...(config.createSite || {})
+    ...(config.createSite || {}),
+    logoUrl: (config.createSite?.logoUrl && config.createSite.logoUrl.trim() !== '') 
+      ? config.createSite.logoUrl 
+      : (existingConfig?.createSite?.logoUrl && existingConfig.createSite.logoUrl.trim() !== '' 
+          ? existingConfig.createSite.logoUrl 
+          : (DEFAULT_LANDING_CONFIG.createSite?.logoUrl || 'https://d.top4top.io/p_3875rj4l41.png'))
   };
   if (!mergedCreateSite.headerCtaButtonText || mergedCreateSite.headerCtaButtonText === 'ابدأ تجربتك المجانية' || mergedCreateSite.headerCtaButtonText === 'أنشئ الآن' || mergedCreateSite.headerCtaButtonText === 'اشترك الآن') {
     mergedCreateSite.headerCtaButtonText = 'ابدأ الآن مجاناً';
   }
   if (!mergedCreateSite.heroCtaButtonText || mergedCreateSite.heroCtaButtonText === 'أنشئ الآن' || mergedCreateSite.heroCtaButtonText === 'اشترك الآن') {
     mergedCreateSite.heroCtaButtonText = 'ابدأ الآن مجاناً';
-  }
-  if (!mergedCreateSite.logoUrl) {
-    mergedCreateSite.logoUrl = 'https://d.top4top.io/p_3875rj4l41.png';
   }
   if (!mergedCreateSite.title) {
     mergedCreateSite.title = 'انشئ حساب مجاني';
@@ -157,8 +168,21 @@ const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => 
   const mergedHero = {
     ...DEFAULT_LANDING_CONFIG.hero,
     ...(config.hero || {}),
-    heroDesktopImage: config.hero?.heroDesktopImage || DEFAULT_LANDING_CONFIG.hero.heroDesktopImage,
-    heroMobileImage: config.hero?.heroMobileImage || DEFAULT_LANDING_CONFIG.hero.heroMobileImage,
+    heroDesktopImage: (config.hero?.heroDesktopImage && config.hero.heroDesktopImage.trim() !== '') 
+      ? config.hero.heroDesktopImage 
+      : (existingConfig?.hero?.heroDesktopImage && existingConfig.hero.heroDesktopImage.trim() !== '' 
+          ? existingConfig.hero.heroDesktopImage 
+          : DEFAULT_LANDING_CONFIG.hero.heroDesktopImage),
+    heroMobileImage: (config.hero?.heroMobileImage && config.hero.heroMobileImage.trim() !== '') 
+      ? config.hero.heroMobileImage 
+      : (existingConfig?.hero?.heroMobileImage && existingConfig.hero.heroMobileImage.trim() !== '' 
+          ? existingConfig.hero.heroMobileImage 
+          : DEFAULT_LANDING_CONFIG.hero.heroMobileImage),
+    subHeroImage: (config.hero?.subHeroImage && config.hero.subHeroImage.trim() !== '') 
+      ? config.hero.subHeroImage 
+      : (existingConfig?.hero?.subHeroImage && existingConfig.hero.subHeroImage.trim() !== '' 
+          ? existingConfig.hero.subHeroImage 
+          : DEFAULT_LANDING_CONFIG.hero.subHeroImage),
   };
   if (!mergedHero.primaryCtaText || mergedHero.primaryCtaText === 'أنشئ الآن' || mergedHero.primaryCtaText === 'اشترك الآن') {
     mergedHero.primaryCtaText = 'ابدأ الآن مجاناً';
@@ -174,7 +198,12 @@ const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => 
 
   const mergedLogin = {
     ...DEFAULT_LANDING_CONFIG.login,
-    ...(config.login || {})
+    ...(config.login || {}),
+    logoUrl: (config.login?.logoUrl && config.login.logoUrl.trim() !== '') 
+      ? config.login.logoUrl 
+      : (existingConfig?.login?.logoUrl && existingConfig.login.logoUrl.trim() !== '' 
+          ? existingConfig.login.logoUrl 
+          : (DEFAULT_LANDING_CONFIG.login?.logoUrl || 'https://i.top4top.io/p_3857n94r80.png'))
   };
   if (!mergedLogin.title || mergedLogin.title === 'تسجيل الدخول إلى حسابك') {
     mergedLogin.title = 'تسجيل الدخول';
@@ -189,11 +218,17 @@ const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => 
     categories: (config.features?.categories && config.features.categories.length > 0)
       ? config.features.categories.map((cat, idx) => {
           const defaultCat = DEFAULT_LANDING_CONFIG.features.categories[idx];
+          const existingCat = existingConfig?.features?.categories?.[idx];
+          const resolvedImage = (cat.imageUrl && cat.imageUrl.trim() !== '')
+            ? cat.imageUrl
+            : (existingCat?.imageUrl && existingCat.imageUrl.trim() !== ''
+                ? existingCat.imageUrl
+                : defaultCat?.imageUrl);
           return {
             ...(defaultCat || {}),
             ...cat,
             items: (cat.items && Array.isArray(cat.items)) ? cat.items : (defaultCat?.items || []),
-            imageUrl: cat.imageUrl || defaultCat?.imageUrl
+            imageUrl: resolvedImage
           };
         })
       : DEFAULT_LANDING_CONFIG.features.categories
@@ -201,7 +236,22 @@ const sanitizeLandingConfig = (config: LandingPageConfig): LandingPageConfig => 
 
   const mergedOverview = {
     ...DEFAULT_LANDING_CONFIG.overview,
-    ...(config.overview || {})
+    ...(config.overview || {}),
+    leftImage: (config.overview?.leftImage && config.overview.leftImage.trim() !== '') 
+      ? config.overview.leftImage 
+      : (existingConfig?.overview?.leftImage && existingConfig.overview.leftImage.trim() !== '' 
+          ? existingConfig.overview.leftImage 
+          : DEFAULT_LANDING_CONFIG.overview?.leftImage),
+    rightImage: (config.overview?.rightImage && config.overview.rightImage.trim() !== '') 
+      ? config.overview.rightImage 
+      : (existingConfig?.overview?.rightImage && existingConfig.overview.rightImage.trim() !== '' 
+          ? existingConfig.overview.rightImage 
+          : DEFAULT_LANDING_CONFIG.overview?.rightImage),
+    controlImage: (config.overview?.controlImage && config.overview.controlImage.trim() !== '') 
+      ? config.overview.controlImage 
+      : (existingConfig?.overview?.controlImage && existingConfig.overview.controlImage.trim() !== '' 
+          ? existingConfig.overview.controlImage 
+          : DEFAULT_LANDING_CONFIG.overview?.controlImage),
   };
 
   const mergedCtaBanner = {

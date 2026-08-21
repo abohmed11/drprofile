@@ -341,9 +341,9 @@ export default function Subscription({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
-                {/* Right Image */}
-                <div className="w-full bg-white p-4 md:p-6 rounded-2xl border-2 border-neutral-200/80 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col justify-between">
-                  <div className={`mb-4 ${currentLang === 'en' ? 'text-left' : 'text-right'}`}>
+                {/* Right Card */}
+                <div className="w-full bg-white p-5 md:p-6 rounded-2xl border-2 border-neutral-200/80 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between h-full group">
+                  <div className={`mb-4 min-h-[80px] md:min-h-[96px] flex flex-col justify-start ${currentLang === 'en' ? 'text-left' : 'text-right'}`}>
                     <h3 className="text-xl sm:text-2xl font-black text-[#10244A] mb-2 select-text">
                       {currentLang === 'en' ? 'Organized Bookings & Easier Experience' : (landingConfig?.overview?.rightTitle || 'حجوزات منظمة وتجربة أسهل')}
                     </h3>
@@ -353,14 +353,26 @@ export default function Subscription({
                         : (landingConfig?.overview?.rightSubtitle || 'نظّم مواعيد عياداتك واستقبل طلبات الحجز من مرضاك بسهولة، مع تحديد مواعيد العمل والوقت المناسب لكل حجز.')}
                     </p>
                   </div>
-                  <div className="mt-auto flex flex-col items-center">
+                  
+                  {/* Image Container with Button Overlay */}
+                  <div className="relative w-full rounded-xl overflow-hidden bg-neutral-50/50 border border-neutral-100 flex items-center justify-center min-h-[240px] sm:min-h-[290px] md:min-h-[340px]">
                     <img 
                       src={landingConfig?.overview?.rightImage || "https://j.top4top.io/p_3875xod3p1.png"} 
                       alt="Clinic & Services Preview" 
-                      className="w-full h-auto object-contain rounded-xl mb-4"
+                      className="w-full h-auto max-h-[380px] object-contain transition-transform duration-500 group-hover:scale-[1.02] block"
                       referrerPolicy="no-referrer"
+                      loading="eager"
+                      decoding="async"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== "https://j.top4top.io/p_3875xod3p1.png") {
+                          target.src = "https://j.top4top.io/p_3875xod3p1.png";
+                        }
+                      }}
                     />
-                    <div className="w-full flex justify-center pt-1">
+                    
+                    {/* Floating Overlay Button on the Image */}
+                    <div className="absolute inset-x-0 bottom-0 pt-10 pb-4 bg-gradient-to-t from-[#10244A]/80 via-[#10244A]/40 to-transparent flex items-center justify-center z-10 px-4">
                       <button
                         type="button"
                         onClick={() => {
@@ -374,7 +386,7 @@ export default function Subscription({
                             onNavigate('landing');
                           }
                         }}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 border-2 border-[#0051A8] text-[#0051A8] hover:bg-[#0051A8] hover:text-white font-black text-sm sm:text-base rounded-xl shadow-xs transition-all duration-200 cursor-pointer active:scale-98"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#0051A8] hover:bg-[#003B7A] text-white font-black text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-98 border border-white/20"
                       >
                         <span>{currentLang === 'en' ? 'Start Free Now' : (landingConfig?.overview?.rightButtonText || 'ابدأ الآن مجاناً')}</span>
                       </button>
@@ -382,9 +394,9 @@ export default function Subscription({
                   </div>
                 </div>
 
-                {/* Left Image */}
-                <div className="w-full bg-white p-4 md:p-6 rounded-2xl border-2 border-neutral-200/80 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col justify-between">
-                  <div className={`mb-4 ${currentLang === 'en' ? 'text-left' : 'text-right'}`}>
+                {/* Left Card */}
+                <div className="w-full bg-white p-5 md:p-6 rounded-2xl border-2 border-neutral-200/80 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between h-full group">
+                  <div className={`mb-4 min-h-[80px] md:min-h-[96px] flex flex-col justify-start ${currentLang === 'en' ? 'text-left' : 'text-right'}`}>
                     <h3 className="text-xl sm:text-2xl font-black text-[#10244A] mb-2 select-text">
                       {currentLang === 'en' ? 'Responsive on Any Device' : (landingConfig?.overview?.leftTitle || 'متناسق على أي جهاز')}
                     </h3>
@@ -394,14 +406,26 @@ export default function Subscription({
                         : (landingConfig?.overview?.leftSubtitle || 'ملف طبي متجاوب تلقائيًا مع مختلف الأجهزة، ليظهر بروفايلك بشكل احترافي ومميز على أي جهاز')}
                     </p>
                   </div>
-                  <div className="mt-auto flex flex-col items-center">
+
+                  {/* Image Container with Button Overlay */}
+                  <div className="relative w-full rounded-xl overflow-hidden bg-neutral-50/50 border border-neutral-100 flex items-center justify-center min-h-[240px] sm:min-h-[290px] md:min-h-[340px]">
                     <img 
                       src={landingConfig?.overview?.leftImage || "https://j.top4top.io/p_387540zrh1.png"} 
                       alt="Profile Preview" 
-                      className="w-full h-auto object-contain rounded-xl mb-4"
+                      className="w-full h-auto max-h-[380px] object-contain transition-transform duration-500 group-hover:scale-[1.02] block"
                       referrerPolicy="no-referrer"
+                      loading="eager"
+                      decoding="async"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== "https://j.top4top.io/p_387540zrh1.png") {
+                          target.src = "https://j.top4top.io/p_387540zrh1.png";
+                        }
+                      }}
                     />
-                    <div className="w-full flex justify-center pt-1">
+
+                    {/* Floating Overlay Button on the Image */}
+                    <div className="absolute inset-x-0 bottom-0 pt-10 pb-4 bg-gradient-to-t from-[#10244A]/80 via-[#10244A]/40 to-transparent flex items-center justify-center z-10 px-4">
                       <button
                         type="button"
                         onClick={() => {
@@ -415,7 +439,7 @@ export default function Subscription({
                             onNavigate('landing');
                           }
                         }}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 sm:py-3 border-2 border-[#0051A8] text-[#0051A8] hover:bg-[#0051A8] hover:text-white font-black text-sm sm:text-base rounded-xl shadow-xs transition-all duration-200 cursor-pointer active:scale-98"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#0051A8] hover:bg-[#003B7A] text-white font-black text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-98 border border-white/20"
                       >
                         <span>{currentLang === 'en' ? 'Start Free Now' : (landingConfig?.overview?.leftButtonText || 'ابدأ الآن مجاناً')}</span>
                       </button>

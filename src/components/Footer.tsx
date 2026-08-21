@@ -6,7 +6,6 @@
 import React from 'react';
 import { LandingPageConfig } from '../types';
 import { getEffectiveSocialLinks, SocialIcon } from './SocialLinks';
-import { FALLBACK_LOGO_SVG, FALLBACK_PAYMENT_METHODS_SVG } from '../lib/imageFallbacks';
 
 interface FooterProps {
   onNavigate?: (view: 'landing' | 'features' | 'subscription' | 'contact' | 'login' | 'dashboard' | 'admin' | 'dr' | 'create' | 'clientWorks' | string, docUsername?: string) => void;
@@ -145,8 +144,6 @@ export default function Footer({ onNavigate, landingConfig, currentLang = 'ar' }
                 alt="Dr Profile Logo" 
                 loading="lazy"
                 decoding="async"
-                referrerPolicy="no-referrer"
-                onError={(e) => { e.currentTarget.src = FALLBACK_LOGO_SVG; }}
                 width="185"
                 height="50"
                 className="w-[140px] sm:w-[185px] h-auto object-contain"
@@ -164,8 +161,6 @@ export default function Footer({ onNavigate, landingConfig, currentLang = 'ar' }
                   alt="Payment Methods" 
                   loading="lazy"
                   decoding="async"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.src = FALLBACK_PAYMENT_METHODS_SVG; }}
                   className="max-h-16 sm:max-h-20 md:max-h-24 w-auto max-w-[280px] sm:max-w-[360px] object-contain rounded-lg drop-shadow-md"
                 />
               </div>

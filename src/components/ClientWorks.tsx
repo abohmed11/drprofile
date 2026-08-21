@@ -7,7 +7,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Doctor, LandingPageConfig, PreviewCardItem } from '../types';
 import { ChevronLeft, ExternalLink } from 'lucide-react';
 import { motion } from 'motion/react';
-import { FALLBACK_PROFILE_DEMO_SVG } from '../lib/imageFallbacks';
 
 interface ClientWorksProps {
   doctors?: Doctor[];
@@ -242,8 +241,6 @@ export default function ClientWorks({
                           alt={card.title || (isEn ? 'Doctor Profile Demo' : 'نموذج بروفايل الطبيب')}
                           className="w-full h-full object-cover object-top pointer-events-none"
                           loading="lazy"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => { e.currentTarget.src = FALLBACK_PROFILE_DEMO_SVG; }}
                           draggable={false}
                         />
                       </div>
@@ -323,7 +320,6 @@ export default function ClientWorks({
                     alt={card.title || (isEn ? 'Doctor Profile Demo' : 'نموذج بروفايل الطبيب')}
                     className="w-full h-full object-cover object-top group-hover:scale-101 transition-transform duration-500"
                     loading="lazy"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
 
